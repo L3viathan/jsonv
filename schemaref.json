@@ -1,0 +1,8 @@
+{
+    "$schema:type": "object",
+    "$schema:id": "thing",
+    "inside": {
+        "$schema:ref": "thing",
+        "$schema:required": false
+    }
+}

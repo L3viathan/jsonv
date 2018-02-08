@@ -27,8 +27,16 @@ typemap = {
     "object": (dict, tuple),
 }
 
+references = {}
+
 
 def schema_validate(obj, schema):
+    # References
+    if schema.get("$schema:ref"):
+        return schema_validate(obj, references[schema["$schema:ref"]])
+    if schema.get("$schema:id"):
+        references[schema["$schema:id"]] = schema
+
     # General checks
     type_oneof, type_noneof = typemap[schema["$schema:type"]]
     if not isinstance(obj, type_oneof) or isinstance(obj, type_noneof):
