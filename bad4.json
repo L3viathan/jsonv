@@ -1,0 +1,5 @@
+{
+    "foo": 8.34,
+    "baz": [true, true, false],
+    invalid json
+}

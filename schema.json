@@ -1,0 +1,19 @@
+{
+    "$schema:type": "object",
+    "foo": {
+        "$schema:type": "int",
+        "$schema:required": true
+    },
+    "bar": {
+        "$schema:type": "string",
+        "$schema:required": false
+    },
+    "baz": {
+        "$schema:type": "array",
+        "$schema:required": true,
+        "$schema:minlength": 4,
+        "$schema:elements": {
+            "$schema:type": "bool"
+        }
+    }
+}

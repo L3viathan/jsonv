@@ -1,0 +1,5 @@
+{
+    "foo": 7,
+    "baz": [true, true, false, true],
+    "extra key": false
+}
