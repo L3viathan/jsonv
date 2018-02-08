@@ -20,7 +20,7 @@
     },
     "$$schema:type": {
         "$schema:type": "string",
-        "$schema:required": true
+        "$schema:required": false
     },
     "$$schema:elements": {
         "$schema:ref": "jsonv",
