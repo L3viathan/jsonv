@@ -8,6 +8,7 @@ Options:
     -l --jsonl      Assume linewise JSON and test schema on each line
 
 """
+import re
 import json
 import docopt
 
@@ -30,7 +31,7 @@ typemap = {
 references = {}
 
 
-def schema_validate(obj, schema):
+def schema_validate(obj, schema, key=None):
     # References
     if schema.get("$schema:ref"):
         return schema_validate(obj, references[schema["$schema:ref"]])
@@ -46,17 +47,29 @@ def schema_validate(obj, schema):
     if minlength and len(obj) < minlength:
         raise ValidationError("Not enough elements (at least {} required)".format(minlength))
 
+    if key is not None and schema.get("$schema:regex"):
+        if not re.match(schema["$schema:regex"], key):
+            raise ValidationError("Key {} does not conform to regex /{}/".format(key, schema["$schema:regex"]))
+
     # Recursion
     if isinstance(obj, dict):
         for key in schema:
             if key.startswith("$schema:"):
                 continue
+            if key.startswith("$$"):
+                key = key[1:]
             if key not in obj and schema[key].get("$schema:required", True):
                 raise ValidationError("Missing key: {}".format(key))
         for key in obj:
+            if key.startswith("$"):
+                key = "$" + key
             if key not in schema:
-                raise ValidationError("Additional key: {}".format(key))
-            schema_validate(obj[key], schema[key])
+                if not schema.get("$schema:any"):
+                    raise ValidationError("Additional key: {}".format(key))
+                else:
+                    schema_validate(obj[key], schema["$schema:any"], key)
+            else:
+                schema_validate(obj[key], schema[key])
     elif isinstance(obj, list):
         for element in obj:
             schema_validate(element, schema["$schema:elements"])
