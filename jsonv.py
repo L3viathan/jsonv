@@ -53,23 +53,25 @@ def schema_validate(obj, schema, key=None):
 
     # Recursion
     if isinstance(obj, dict):
-        for key in schema:
-            if key.startswith("$schema:"):
+        for skey in schema:
+            okey = skey
+            if skey.startswith("$schema:"):
                 continue
-            if key.startswith("$$"):
-                key = key[1:]
-            if key not in obj and schema[key].get("$schema:required", True):
-                raise ValidationError("Missing key: {}".format(key))
-        for key in obj:
-            if key.startswith("$"):
-                key = "$" + key
-            if key not in schema:
+            if skey.startswith("$$"):
+                okey = skey[1:]
+            if okey not in obj and schema[skey].get("$schema:required", True):
+                raise ValidationError("Missing key: {}".format(skey))
+        for okey in obj:
+            skey = okey
+            if okey.startswith("$"):
+                skey = "$" + okey
+            if skey not in schema:
                 if not schema.get("$schema:any"):
-                    raise ValidationError("Additional key: {}".format(key))
+                    raise ValidationError("Additional key: {}".format(okey))
                 else:
-                    schema_validate(obj[key], schema["$schema:any"], key)
+                    schema_validate(obj[okey], schema["$schema:any"], okey)
             else:
-                schema_validate(obj[key], schema[key])
+                schema_validate(obj[okey], schema[skey])
     elif isinstance(obj, list):
         for element in obj:
             schema_validate(element, schema["$schema:elements"])

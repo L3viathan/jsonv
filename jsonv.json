@@ -1,0 +1,38 @@
+{
+    "$schema:id": "jsonv",
+    "$schema:any": {
+        "$schema:type": "object",
+        "$schema:ref": "jsonv"
+    },
+    "$schema:type": "object",
+    "$$schema:id": {
+        "$schema:type": "string",
+        "$schema:required": false
+    },
+    "$$schema:ref": {
+        "$schema:type": "string",
+        "$schema:required": false
+    },
+    "$$schema:any": {
+        "$schema:ref": "jsonv",
+        "$schema:required": false,
+        "$schema:type": "object"
+    },
+    "$$schema:type": {
+        "$schema:type": "string",
+        "$schema:required": true
+    },
+    "$$schema:elements": {
+        "$schema:ref": "jsonv",
+        "$schema:required": false,
+        "$schema:type": "object"
+    },
+    "$$schema:minlength": {
+        "$schema:required": false,
+        "$schema:type": "int"
+    },
+    "$$schema:required": {
+        "$schema:type": "bool",
+        "$schema:required": false
+    }
+}
